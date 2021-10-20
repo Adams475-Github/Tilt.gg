@@ -1,4 +1,7 @@
 import datetime
+
+import requests
+
 from bin import MiscUtils
 from riotwatcher import LolWatcher
 
@@ -31,4 +34,22 @@ class QueryUtils:
             match_dates.append(formatted_time)
             recent_matches.append(match)
         return recent_matches
+
+    def summoners_in_curr_game(self, summoner_name):
+        participants_names = []
+        summoner = self.watcher.summoner.by_name(self.default_region, summoner_name)
+        summoner_id = summoner["id"]
+        curr_match = None
+        try:
+            curr_match = self.watcher.spectator.by_summoner(region='na1', encrypted_summoner_id=summoner_id)
+        except requests.HTTPError as exception:
+            print("Summoner not currently in a game!")
+            return None
+        participant_info_list = curr_match["participants"]
+        for i in range(len(participant_info_list)):
+            participant_info = participant_info_list[i]
+            participants_names.append(participant_info["summonerName"])
+        return participants_names
+
+
 
