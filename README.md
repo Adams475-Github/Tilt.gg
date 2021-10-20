@@ -1,2 +1,2 @@
 # Tilt.gg
- A quantifiable way to measure tilt of your league of legends teammates.
+ A quantifiable way to measure the tilt of your league of legends teammates.
