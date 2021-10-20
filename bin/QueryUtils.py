@@ -1,5 +1,5 @@
 import datetime
-import MiscUtils
+from bin import MiscUtils
 from riotwatcher import LolWatcher
 
 
