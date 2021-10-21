@@ -21,7 +21,7 @@ class PlayerGameData:
         for i in range(len(participant_info_list)):
             if participant_info_list[i]["summonerName"] == self.summoner_name:
                 self.deaths = participant_info_list[i]["deaths"]
-                self.champ_name = participant_info_list[i]["champName"]
+                self.champ_name = participant_info_list[i]["championName"]
 
     def __str__(self):
         return "TODO"

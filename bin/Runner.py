@@ -16,8 +16,8 @@ for i in range(len(summoners_in_game)):
         playerDataList.append(playerData)
     summoner_data[summoners_in_game[i]] = playerDataList
 
-playerInstanceDataList =  summoner_data[summoners_in_game[i]]
-sumdeaths = None
-for i in range(len(playerInstanceDataList)):
-    sumdeaths += playerInstanceDataList[i].deaths
-sumdeaths /= len(playerInstanceDataList)
+playerInstanceDataList = summoner_data[summoners_in_game[i]]
+#sumdeaths = None
+#for i in range(len(playerInstanceDataList)):
+    #sumdeaths += playerInstanceDataList[i].deaths
+#sumdeaths /= len(playerInstanceDataList)
