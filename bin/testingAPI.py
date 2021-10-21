@@ -1,8 +1,9 @@
 from riotwatcher import LolWatcher, ApiError
+from bin import config
 
 
 def setup(name, amount_of_games):
-    api_key = 'RGAPI-d59eb136-8a17-4bb3-847f-28649ae054cf'
+    api_key = config.api_key
     watcher = LolWatcher(api_key)
     my_region = 'na1'
     me = watcher.summoner.by_name(my_region, name)
