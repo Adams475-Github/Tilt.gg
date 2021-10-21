@@ -1,5 +1,5 @@
 from riotwatcher import LolWatcher, ApiError
-from bin import config
+import config
 
 
 def setup(name, amount_of_games):

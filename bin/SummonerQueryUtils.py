@@ -1,6 +1,6 @@
 import datetime
 import requests
-from bin import MiscUtils, config
+import MiscUtils, config
 from riotwatcher import LolWatcher
 
 

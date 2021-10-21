@@ -1,4 +1,4 @@
-from bin import SummonerQueryUtils, PlayerGameData
+import SummonerQueryUtils, PlayerGameData
 #test
 q = SummonerQueryUtils.SummonerQueryUtils("NA1", "hulksmash1337")
 summoners_in_game = q.summoners_in_curr_game()
@@ -17,6 +17,7 @@ for i in range(len(summoners_in_game)):
     summoner_data[summoners_in_game[i]] = playerDataList
 
 playerInstanceDataList = summoner_data[summoners_in_game[i]]
+print(playerInstanceDataList)
 #sumdeaths = None
 #for i in range(len(playerInstanceDataList)):
     #sumdeaths += playerInstanceDataList[i].deaths
