@@ -1,6 +1,6 @@
-from bin import QueryUtils
+from bin import SummonerQueryUtils
 
-q = QueryUtils.QueryUtils("na1")
-# matches = q.query_recent_games(summoner_name="hulksmash1337", amount=20)
-print(q.summoners_in_curr_game("hulksmash1337"))
+q = SummonerQueryUtils.SummonerQueryUtils("NA1", "hulksmash1337")
+matches = q.query_recent_games(amount=20)
+print(q.summoners_in_curr_game())
 

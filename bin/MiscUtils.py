@@ -8,7 +8,7 @@ def is_recent(time1, time2):
     d2 = int(time2[9:10])
     h2 = int(time2[11:13])
 
-    if abs(h1 - h2) < 5:
+    if abs(h1 - h2) < 5:  # TODO
         if (m1 - m2) == 0:
             if (d1 - d2) == 0:
                 return True
