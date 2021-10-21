@@ -35,6 +35,7 @@ class QueryUtils:
             recent_matches.append(match)
         return recent_matches
 
+    # Returns summoner names in the specified summoner's current game
     def summoners_in_curr_game(self, summoner_name):
         participants_names = []
         summoner = self.watcher.summoner.by_name(self.default_region, summoner_name)
