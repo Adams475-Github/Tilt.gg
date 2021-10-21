@@ -1,5 +1,5 @@
 from bin import SummonerQueryUtils, PlayerGameData
-
+#test
 q = SummonerQueryUtils.SummonerQueryUtils("NA1", "hulksmash1337")
 summoners_in_game = q.summoners_in_curr_game()
 summoner_data = {}
