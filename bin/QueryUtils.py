@@ -1,13 +1,11 @@
 import datetime
-
 import requests
-
-from bin import MiscUtils
+from bin import MiscUtils, config
 from riotwatcher import LolWatcher
 
 
 class QueryUtils:
-    api_key = 'RGAPI-bb5822f6-753b-4bbb-8586-359614ec5837'
+    api_key = config.api_key
     watcher = LolWatcher(api_key)
     default_region = ""
 
