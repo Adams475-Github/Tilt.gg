@@ -16,14 +16,13 @@ for i in range(len(summoners_in_game)):
         playerDataList.append(playerData)
     summoner_data[summoners_in_game[i]] = playerDataList
 
-<<<<<<< Updated upstream
+
 playerInstanceDataList = summoner_data[summoners_in_game[i]]
 print(playerInstanceDataList)
 #sumdeaths = None
 #for i in range(len(playerInstanceDataList)):
     #sumdeaths += playerInstanceDataList[i].deaths
 #sumdeaths /= len(playerInstanceDataList)
-=======
 
 playerInstanceDataList = summoner_data["Dizzydish"]
 print(playerInstanceDataList[0].game_time)
@@ -34,4 +33,4 @@ for i in range(len(playerInstanceDataList)):
 sumdeaths /= len(playerInstanceDataList)
 
 print(sumdeaths)
->>>>>>> Stashed changes
+
