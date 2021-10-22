@@ -1,5 +1,4 @@
 import SummonerQueryUtils, PlayerGameData, TiltCalc
-#test
 
 
 q = SummonerQueryUtils.SummonerQueryUtils("NA1", "Proosia")
