@@ -22,6 +22,7 @@ class SummonerQueryUtils:
         raw_recent_matches = self.watcher.match.matchlist_by_puuid(region='AMERICAS', puuid=summoner_id, count=amount)
         match_dates = []
         recent_matches = []
+        game_durations = []
 
         for i in range(len(raw_recent_matches)):
             match = self.watcher.match.by_id(region='AMERICAS', match_id=raw_recent_matches[i])

@@ -1,9 +1,10 @@
-import SummonerQueryUtils, PlayerGameData
+import SummonerQueryUtils, PlayerGameData, TiltCalc
 #test
-q = SummonerQueryUtils.SummonerQueryUtils("NA1", "hulksmash1337")
+
+
+q = SummonerQueryUtils.SummonerQueryUtils("NA1", "Proosia")
 summoners_in_game = q.summoners_in_curr_game()
 summoner_data = {}
-
 for i in range(len(summoners_in_game)):
     summoner_data[summoners_in_game[i]] = None
 
@@ -16,21 +17,8 @@ for i in range(len(summoners_in_game)):
         playerDataList.append(playerData)
     summoner_data[summoners_in_game[i]] = playerDataList
 
+playerInstanceDataList = summoner_data["Proosia"]
 
-playerInstanceDataList = summoner_data[summoners_in_game[i]]
-print(playerInstanceDataList)
-#sumdeaths = None
-#for i in range(len(playerInstanceDataList)):
-    #sumdeaths += playerInstanceDataList[i].deaths
-#sumdeaths /= len(playerInstanceDataList)
+t = TiltCalc.TiltCalc(playerInstanceDataList)
 
-playerInstanceDataList = summoner_data["Dizzydish"]
-print(playerInstanceDataList[0].game_time)
-print(playerInstanceDataList[1].deaths)
-sumdeaths = 0
-for i in range(len(playerInstanceDataList)):
-    sumdeaths += playerInstanceDataList[i].deaths
-sumdeaths /= len(playerInstanceDataList)
-
-print(sumdeaths)
 
