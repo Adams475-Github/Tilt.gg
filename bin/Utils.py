@@ -46,7 +46,7 @@ class SummonerQueryUtils:
         self.summoner_id = self.summoner["puuid"]
 
     # Returns X recent matches, with each match being 5 hours within the last one
-    def recent_games(self, amount):  #TODO remove amount
+    def recent_games(self, amount):  # TODO remove amount
         raw_recent_matches = self.watcher.match.matchlist_by_puuid('AMERICAS', self.summoner_id, amount)
         match_dates = []
         recent_matches = []
