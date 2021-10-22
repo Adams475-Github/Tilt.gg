@@ -1,7 +1,8 @@
 import datetime
 import requests
-from bin import MiscUtils, config
 from riotwatcher import LolWatcher
+import MiscUtils
+import config
 
 
 class SummonerQueryUtils:
@@ -10,16 +11,17 @@ class SummonerQueryUtils:
     default_region = ""
     summoner_name = None
     summoner = None
+    summoner_id = None
 
     def __init__(self, default_region, summoner_name):
         self.default_region = default_region
         self.summoner_name = summoner_name
         self.summoner = self.watcher.summoner.by_name(self.default_region, self.summoner_name)
+        self.summoner_id = self.summoner["puuid"]
 
     # Returns X recent matches, with each match being 5 hours within the last one
     def query_recent_games(self, amount):
-        summoner_id = self.summoner["puuid"]
-        raw_recent_matches = self.watcher.match.matchlist_by_puuid(region='AMERICAS', puuid=summoner_id, count=amount)
+        raw_recent_matches = self.watcher.match.matchlist_by_puuid('AMERICAS', self.summoner_id, amount)
         match_dates = []
         recent_matches = []
 
@@ -50,7 +52,6 @@ class SummonerQueryUtils:
             participants_names.append(participant_info["summonerName"])
         return participants_names
 
-
-
-
-
+    def get_latest_match(self):
+        match_id = self.watcher.match.matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=1)
+        return self.watcher.match.by_id(region='AMERICAS', match_id=match_id[0])
