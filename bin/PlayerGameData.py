@@ -6,15 +6,17 @@ class RawPGD:
     # Raw Game Data
     deaths = None
     kills = None
+    assists = None
     game_time = None
     cs = None
-    win = None
+    lost = None
     champ_name = None
     early_surrender = None
     surrender = None
     role = None
     wards_bought = None
     kp = None
+    possibly_inted = None
 
     # Processed Raw
     cspm = None
@@ -32,14 +34,30 @@ class RawPGD:
         for i in range(len(participant_info_list)):
             if participant_info_list[i]["summonerName"] == self.summoner_name:
                 tmp = participant_info_list[i]
+                #Data from info dictionary
+                self.game_duration = self.match["info"]["gameDuration"] / 60
+
+                #Data from participants dictionary
                 self.deaths = tmp["deaths"]
                 self.kills = tmp["kills"]
                 self.champ_name = tmp["championName"]
-                self.win = tmp["win"]
                 self.early_surrender = tmp["teamEarlySurrendered"]
-                self.role = tmp["lane"]
-                self.cs = tmp["totalMinionsKilled"]
+                self.assists = participant_info_list[i]["assists"]
+                self.cs = participant_info_list[i]["totalMinionsKilled"] / self.game_duration
+                self.role = participant_info_list[i]["teamPosition"]
+                if participant_info_list[i]["win"] == True:
+                    self.lost = False
+                elif participant_info_list[i]["win"] == False:
+                    self.lost = True
+                
+                if self.deaths > 0:
+                    if (self.kills / self.deaths) <= .1 and self.role != "SUPPORT":
+                        self.possibly_inted == True
+                    else:
+                        self.possibly_inted == False
 
+             
+            
     def process_raw(self):  # TODO
         return None
 
@@ -77,8 +95,10 @@ class AggPGD:  # TODO
         for i in range(len(self.raw_pgd_list)):
             self.avg_kills += self.raw_pgd_list[i].kills
         self.avg_kills /= len(self.raw_pgd_list)
-
-        self.avg_KD = self.avg_kills / self.avg_deaths
+        if self.avg_deaths > 0:
+            self.avg_KD = self.avg_kills / self.avg_deaths
+        else:
+            self.avg_KD = self.avg_kills
 
         for i in range(len(self.raw_pgd_list)):
             self.avg_cs += self.raw_pgd_list[i].cs
@@ -94,6 +114,8 @@ class AggPGD:  # TODO
         for i in range(len(self.raw_pgd_list)):
             if self.raw_pgd_list[i].lost == True:
                 self.losses += 1
+        
+        self.wl_ratio = 1 - (self.losses / len(self.raw_pgd_list))
         
 
 

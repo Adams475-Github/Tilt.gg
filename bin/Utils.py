@@ -8,6 +8,7 @@ import Calculations
 
 def get_agg_pd(region, summoner_name):
     squ = SummonerQueryUtils(region, summoner_name)
+
     sicg = squ.summoners_in_curr_game()  # Summoners In Current Game
     summoner_rg_pairs = {}
     for i in range(len(sicg)):
@@ -26,8 +27,9 @@ def get_agg_pd(region, summoner_name):
 
 def tilt_agg(agg_pd_list):
     summoner_tilt_pairs = {}
-    for i in range(len(agg_pd_list)):
-        summoner_tilt_pairs[agg_pd_list[i]] = Calculations.calc_tilt(agg_pd_list)
+    for i in agg_pd_list:
+        summoner_tilt_pairs[i] = Calculations.calc_tilt(agg_pd_list)
+    print(summoner_tilt_pairs)
     return summoner_tilt_pairs
 
 
