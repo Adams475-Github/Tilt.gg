@@ -57,8 +57,43 @@ class AggPGD:  # TODO
     lrgst_lss_stk = None
     wl_ratio = None
     avg_kp = None
+    avg_kills = 0
+    avg_KD = 0
+    avg_deaths = 0
+    avg_int = 0
+    losses = 0
+    avg_cs = 0
 
     def __init__(self, raw_pgd_list):
         self.raw_pgd_list = raw_pgd_list
+        self.init_data()
+
+
+    def init_data(self):  
+        for i in range(len(self.raw_pgd_list)):
+            self.avg_deaths += self.raw_pgd_list[i].deaths
+        self.avg_deaths /= len(self.raw_pgd_list)
+
+        for i in range(len(self.raw_pgd_list)):
+            self.avg_kills += self.raw_pgd_list[i].kills
+        self.avg_kills /= len(self.raw_pgd_list)
+
+        self.avg_KD = self.avg_kills / self.avg_deaths
+
+        for i in range(len(self.raw_pgd_list)):
+            self.avg_cs += self.raw_pgd_list[i].cs
+        self.avg_cs /= len(self.raw_pgd_list)
+
+        for i in range(len(self.raw_pgd_list)):
+            if self.raw_pgd_list[i].possibly_inted == True:
+                self.avg_int += 1
+        self.avg_int /= len(self.raw_pgd_list)
+
+
+        # TODO - Not sure if losses is actually working
+        for i in range(len(self.raw_pgd_list)):
+            if self.raw_pgd_list[i].lost == True:
+                self.losses += 1
+        
 
 
