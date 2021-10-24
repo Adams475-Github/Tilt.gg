@@ -34,36 +34,34 @@ class RawPGD:
         for i in range(len(participant_info_list)):
             if participant_info_list[i]["summonerName"] == self.summoner_name:
                 tmp = participant_info_list[i]
-                #Data from info dictionary
-                self.game_duration = self.match["info"]["gameDuration"] / 60
+                # Data from info dictionary
+                self.game_time = self.match["info"]["gameDuration"] / 60
 
-                #Data from participants dictionary
+                # Data from participants dictionary
                 self.deaths = tmp["deaths"]
                 self.kills = tmp["kills"]
                 self.champ_name = tmp["championName"]
                 self.early_surrender = tmp["teamEarlySurrendered"]
                 self.assists = participant_info_list[i]["assists"]
-                self.cs = participant_info_list[i]["totalMinionsKilled"] / self.game_duration
+                self.cs = participant_info_list[i]["totalMinionsKilled"] / self.game_time
                 self.role = participant_info_list[i]["teamPosition"]
-                if participant_info_list[i]["win"] == True:
+                if participant_info_list[i]["win"]:
                     self.lost = False
-                elif participant_info_list[i]["win"] == False:
+                elif not participant_info_list[i]["win"]:
                     self.lost = True
-                
+
                 if self.deaths > 0:
                     if (self.kills / self.deaths) <= .1 and self.role != "SUPPORT":
-                        self.possibly_inted == True
+                        self.possibly_inted = True
                     else:
-                        self.possibly_inted == False
+                        self.possibly_inted = False
 
-             
-            
     def process_raw(self):  # TODO
         return None
 
     def __str__(self):
         return str(self.kills) + " " + str(self.deaths) + " " + str(self.game_time) + " " + str(self.cs) + " " \
-               + str(self.win) + " " + str(self.champ_name) + " " + str(self.early_surrender) + " " + str(self.role)
+               + str(self.lost) + " " + str(self.champ_name) + " " + str(self.early_surrender) + " " + str(self.role)
 
 
 class AggPGD:  # TODO
@@ -86,8 +84,7 @@ class AggPGD:  # TODO
         self.raw_pgd_list = raw_pgd_list
         self.init_data()
 
-
-    def init_data(self):  
+    def init_data(self):
         for i in range(len(self.raw_pgd_list)):
             self.avg_deaths += self.raw_pgd_list[i].deaths
         self.avg_deaths /= len(self.raw_pgd_list)
@@ -105,17 +102,13 @@ class AggPGD:  # TODO
         self.avg_cs /= len(self.raw_pgd_list)
 
         for i in range(len(self.raw_pgd_list)):
-            if self.raw_pgd_list[i].possibly_inted == True:
+            if self.raw_pgd_list[i].possibly_inted:
                 self.avg_int += 1
         self.avg_int /= len(self.raw_pgd_list)
 
-
         # TODO - Not sure if losses is actually working
         for i in range(len(self.raw_pgd_list)):
-            if self.raw_pgd_list[i].lost == True:
+            if self.raw_pgd_list[i].lost:
                 self.losses += 1
-        
+
         self.wl_ratio = 1 - (self.losses / len(self.raw_pgd_list))
-        
-
-

@@ -49,12 +49,12 @@ class SummonerQueryUtils:
 
     # Returns X recent matches, with each match being 5 hours within the last one
     def recent_games(self, amount):  # TODO remove amount
-        raw_recent_matches = self.watcher.match.matchlist_by_puuid('AMERICAS', self.summoner_id, amount)
+        raw_recent_matches = self.watcher.match.matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=amount)
         match_dates = []
         recent_matches = []
 
         for i in range(len(raw_recent_matches)):
-            match = self.watcher.match.by_id(region='AMERICAS', match_id=raw_recent_matches[i])
+            match = self.watcher.match.by_id('AMERICAS', raw_recent_matches[i])
             mtime = match["info"]["gameStartTimestamp"]
             formatted_time = datetime.datetime.utcfromtimestamp(mtime / 1000).strftime('%Y-%m-%d %H:%M:%S')
             if i > 0:
