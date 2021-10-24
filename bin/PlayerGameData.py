@@ -2,6 +2,7 @@ class RawPGD:
     # Initial Data
     summoner_name = None
     match = None
+    pifl = None
 
     # Raw Game Data
     deaths = None
@@ -26,14 +27,14 @@ class RawPGD:
     def __init__(self, match, summoner_name):
         self.summoner_name = summoner_name
         self.match = match
+        self.pifl = self.match["info"]["participants"]
         self.init_raw()
         self.process_raw()
 
     def init_raw(self):  # TODO
-        participant_info_list = self.match["info"]["participants"]
-        for i in range(len(participant_info_list)):
-            if participant_info_list[i]["summonerName"] == self.summoner_name:
-                tmp = participant_info_list[i]
+        for i in range(len(self.pifl)):
+            if self.pifl[i]["summonerName"] == self.summoner_name:
+                tmp = self.pifl[i]
                 # Data from info dictionary
                 self.game_time = self.match["info"]["gameDuration"] / 60
 
@@ -42,12 +43,17 @@ class RawPGD:
                 self.kills = tmp["kills"]
                 self.champ_name = tmp["championName"]
                 self.early_surrender = tmp["teamEarlySurrendered"]
-                self.assists = participant_info_list[i]["assists"]
-                self.cs = participant_info_list[i]["totalMinionsKilled"] / self.game_time
-                self.role = participant_info_list[i]["teamPosition"]
-                if participant_info_list[i]["win"]:
+                self.assists = self.pifl[i]["assists"]
+                self.cs = self.pifl[i]["totalMinionsKilled"]
+                self.role = self.pifl[i]["teamPosition"]
+
+    def process_raw(self):  # TODO
+        for i in range(len(self.pifl)):
+            if self.pifl[i]["summonerName"] == self.summoner_name:
+                self.cspm = self.cs / self.game_time
+                if self.pifl[i]["win"]:
                     self.lost = False
-                elif not participant_info_list[i]["win"]:
+                else:
                     self.lost = True
 
                 if self.deaths > 0:
@@ -55,9 +61,6 @@ class RawPGD:
                         self.possibly_inted = True
                     else:
                         self.possibly_inted = False
-
-    def process_raw(self):  # TODO
-        return None
 
     def __str__(self):
         return str(self.kills) + " " + str(self.deaths) + " " + str(self.game_time) + " " + str(self.cs) + " " \
@@ -67,6 +70,7 @@ class RawPGD:
 class AggPGD:  # TODO
     # Initial Data
     raw_pgd_list = None
+    summoner_name = None
 
     # Aggregated Data
     curr_lss_stk = None

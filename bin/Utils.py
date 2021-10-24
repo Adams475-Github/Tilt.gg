@@ -3,12 +3,10 @@ import datetime
 import requests
 import config
 import PlayerGameData
-import Calculations
 
 
 def get_agg_pd(region, summoner_name):
     squ = SummonerQueryUtils(region, summoner_name)
-
     sicg = squ.summoners_in_curr_game()  # Summoners In Current Game
     summoner_rg_pairs = {}
     for i in range(len(sicg)):
@@ -19,18 +17,11 @@ def get_agg_pd(region, summoner_name):
             raw_pgd_list.append(PlayerGameData.RawPGD(recent_games[j], sicg[i]))
         summoner_rg_pairs[sicg[i]] = raw_pgd_list
 
-    agg_pgd_list = {}
+    agg_pgd_dict = {}
     for i in range(len(summoner_rg_pairs)):
-        agg_pgd_list[sicg[i]] = PlayerGameData.AggPGD(summoner_rg_pairs[sicg[i]])
-    return agg_pgd_list
-
-
-def tilt_agg(agg_pd_list):
-    summoner_tilt_pairs = {}
-    for i in agg_pd_list:
-        summoner_tilt_pairs[i] = Calculations.calc_tilt(agg_pd_list)
-    print(summoner_tilt_pairs)
-    return summoner_tilt_pairs
+        agg_pgd_dict[sicg[i]] = PlayerGameData.AggPGD(summoner_rg_pairs[sicg[i]])
+    return agg_pgd_dict
+#  Returns a dictionary of {Summoner Name, AggPGD}
 
 
 class SummonerQueryUtils:
@@ -49,7 +40,8 @@ class SummonerQueryUtils:
 
     # Returns X recent matches, with each match being 5 hours within the last one
     def recent_games(self, amount):  # TODO remove amount
-        raw_recent_matches = self.watcher.match.matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=amount)
+        raw_recent_matches = self.watcher.match\
+            .matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=amount)
         match_dates = []
         recent_matches = []
 
