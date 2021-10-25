@@ -27,7 +27,7 @@ def get_live_game_agg_pgd_list(region, summoner_name):
 
 
 class SummonerQueryUtils:
-    api_key = config.api_key
+    api_key = Config.api_key
     watcher = LolWatcher(api_key)
     default_region = ""
     summoner_name = None
