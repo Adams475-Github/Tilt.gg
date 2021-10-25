@@ -3,23 +3,24 @@ import datetime
 import requests
 import config
 import PlayerGameData
+import Constants
 
 
-def get_agg_pd(region, summoner_name):
+def get_live_game_agg_pgd_list(region, summoner_name):
     squ = SummonerQueryUtils(region, summoner_name)
-    sicg = squ.summoners_in_curr_game()  # Summoners In Current Game
+    summoners_in_live_game = squ.get_summoners_in_live_game()  # Summoners In Current Game
     summoner_rg_pairs = {}
-    for i in range(len(sicg)):
-        temp_squ = SummonerQueryUtils(region, sicg[i])
-        recent_games = temp_squ.recent_games(10)
+    for i in range(len(summoners_in_live_game)):
+        temp_squ = SummonerQueryUtils(region, summoners_in_live_game[i])
+        recent_games = temp_squ.get_recent_games()
         raw_pgd_list = []
         for j in range(len(recent_games)):
-            raw_pgd_list.append(PlayerGameData.RawPGD(recent_games[j], sicg[i]))
-        summoner_rg_pairs[sicg[i]] = raw_pgd_list
+            raw_pgd_list.append(PlayerGameData.RawPGD(recent_games[j], summoners_in_live_game[i]))
+        summoner_rg_pairs[summoners_in_live_game[i]] = raw_pgd_list
 
     agg_pgd_dict = {}
     for i in range(len(summoner_rg_pairs)):
-        agg_pgd_dict[sicg[i]] = PlayerGameData.AggPGD(summoner_rg_pairs[sicg[i]])
+        agg_pgd_dict[summoners_in_live_game[i]] = PlayerGameData.AggPGD(summoner_rg_pairs[summoners_in_live_game[i]])
     return agg_pgd_dict
 #  Returns a dictionary of {Summoner Name, AggPGD}
 
@@ -39,9 +40,9 @@ class SummonerQueryUtils:
         self.summoner_id = self.summoner["puuid"]
 
     # Returns X recent matches, with each match being 5 hours within the last one
-    def recent_games(self, amount):  # TODO remove amount
-        raw_recent_matches = self.watcher.match\
-            .matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=amount)
+    def get_recent_games(self):  # TODO remove amount
+        raw_recent_matches = self.watcher.match \
+            .matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=Constants.MAX_QUERY)
         match_dates = []
         recent_matches = []
 
@@ -52,12 +53,15 @@ class SummonerQueryUtils:
             if i > 0:
                 if not MiscUtils.is_recent(formatted_time, match_dates[i - 1]):
                     break
+            else:
+                if MiscUtils.not_today(formatted_time):
+                    break
             match_dates.append(formatted_time)
             recent_matches.append(match)
         return recent_matches
 
     # Returns summoner names in the specified summoner's current game
-    def summoners_in_curr_game(self):
+    def get_summoners_in_live_game(self):
         participants_names = []
         summoner_id = self.summoner["id"]  # Different from normal puuid!
         try:
@@ -71,12 +75,21 @@ class SummonerQueryUtils:
             participants_names.append(participant_info["summonerName"])
         return participants_names
 
-    def latest_match(self):
+    def get_latest_match(self):
         match_id = self.watcher.match.matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=1)
         return self.watcher.match.by_id(region='AMERICAS', match_id=match_id[0])
 
 
 class MiscUtils:
+
+    @staticmethod
+    def not_today(time):
+        today = datetime.date.today()
+        day = int(today.strftime("%d"))
+        d1 = int(time[9:10])
+        if day != d1:
+            return False
+        return True
 
     @staticmethod
     def is_recent(time1, time2):
