@@ -84,8 +84,9 @@ class AggPGD:  # TODO
     losses = 0
     avg_cs = 0
 
-    def __init__(self, raw_pgd_list):
+    def __init__(self, summoner_name, raw_pgd_list):
         self.raw_pgd_list = raw_pgd_list
+        self.summoner_name = summoner_name
         self.init_data()
 
     def init_data(self):

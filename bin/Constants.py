@@ -1,1 +1,1 @@
-MAX_QUERY = 5
+MAX_QUERY = 10

@@ -1,7 +1,7 @@
 from riotwatcher import LolWatcher
 import datetime
 import requests
-import config
+import Config
 import PlayerGameData
 import Constants
 
@@ -18,11 +18,12 @@ def get_live_game_agg_pgd_list(region, summoner_name):
             raw_pgd_list.append(PlayerGameData.RawPGD(recent_games[j], summoners_in_live_game[i]))
         summoner_rg_pairs[summoners_in_live_game[i]] = raw_pgd_list
 
-    agg_pgd_dict = {}
+    agg_pgd_list = []
     for i in range(len(summoner_rg_pairs)):
-        agg_pgd_dict[summoners_in_live_game[i]] = PlayerGameData.AggPGD(summoner_rg_pairs[summoners_in_live_game[i]])
-    return agg_pgd_dict
-#  Returns a dictionary of {Summoner Name, AggPGD}
+        agg_pgd_list.append(PlayerGameData.AggPGD(summoners_in_live_game[i],
+                                                  summoner_rg_pairs[summoners_in_live_game[i]]))
+    return agg_pgd_list
+#  Returns a list of AggPGDs
 
 
 class SummonerQueryUtils:
@@ -40,7 +41,7 @@ class SummonerQueryUtils:
         self.summoner_id = self.summoner["puuid"]
 
     # Returns X recent matches, with each match being 5 hours within the last one
-    def get_recent_games(self):  # TODO remove amount
+    def get_recent_games(self):
         raw_recent_matches = self.watcher.match \
             .matchlist_by_puuid(region='AMERICAS', puuid=self.summoner_id, count=Constants.MAX_QUERY)
         match_dates = []
