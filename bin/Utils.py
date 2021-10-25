@@ -86,20 +86,20 @@ class MiscUtils:
     @staticmethod
     def not_today(time):
         today = datetime.date.today()
-        day = int(today.strftime("%d"))
-        d1 = int(time[9:10])
-        if day != d1:
-            return False
-        return True
+        d1 = int(today.strftime("%d"))
+        d2 = int(time[8:10])
+        if d1 != d2:
+            return True
+        return False
 
     @staticmethod
     def is_recent(time1, time2):
-        m1 = int(time1[6:7])
-        d1 = int(time1[9:10])
+        m1 = int(time1[5:7])
+        d1 = int(time1[8:10])
         h1 = int(time1[11:13])
 
-        m2 = int(time2[6:7])
-        d2 = int(time2[9:10])
+        m2 = int(time2[5:7])
+        d2 = int(time2[8:10])
         h2 = int(time2[11:13])
 
         if abs(h1 - h2) < 5:  # TODO (and I really mean TODO it is broken)

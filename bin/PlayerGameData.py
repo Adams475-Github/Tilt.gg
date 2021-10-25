@@ -87,7 +87,8 @@ class AggPGD:  # TODO
     def __init__(self, summoner_name, raw_pgd_list):
         self.raw_pgd_list = raw_pgd_list
         self.summoner_name = summoner_name
-        self.init_data()
+        if len(raw_pgd_list) != 0:
+            self.init_data()
 
     def init_data(self):
         for i in range(len(self.raw_pgd_list)):
