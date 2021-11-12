@@ -73,10 +73,11 @@ class AggPGD:  # TODO
     summoner_name = None
 
     # Aggregated Data
-    curr_lss_stk = None
-    lrgst_lss_stk = None
-    wl_ratio = None
-    avg_kp = None
+    wins = 0
+    curr_lss_stk = 0
+    lrgst_lss_stk = 0
+    wl_ratio = 0
+    avg_kp = 0
     avg_kills = 0
     avg_KD = 0
     avg_deaths = 0
@@ -116,5 +117,27 @@ class AggPGD:  # TODO
         for i in range(len(self.raw_pgd_list)):
             if self.raw_pgd_list[i].lost:
                 self.losses += 1
+            else:
+                self.wins += 1
 
         self.wl_ratio = 1 - (self.losses / len(self.raw_pgd_list))
+
+        loss_count = 0
+        for pgd in self.raw_pgd_list:
+            if pgd.lost:
+                loss_count += 1
+                if loss_count > self.lrgst_lss_stk:
+                    self.lrgst_lss_stk = loss_count
+            else:
+                loss_count = 0
+
+        loss_count = 0
+        for pgd in self.raw_pgd_list:
+            if pgd.lost:
+                loss_count += 1
+                self.curr_lss_stk = loss_count
+            else:
+                break
+
+
+

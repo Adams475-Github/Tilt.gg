@@ -23,6 +23,8 @@ def get_live_game_agg_pgd_list(region, summoner_name):
         agg_pgd_list.append(PlayerGameData.AggPGD(summoners_in_live_game[i],
                                                   summoner_rg_pairs[summoners_in_live_game[i]]))
     return agg_pgd_list
+
+
 #  Returns a list of AggPGDs
 
 
@@ -102,8 +104,20 @@ class MiscUtils:
         d2 = int(time2[8:10])
         h2 = int(time2[11:13])
 
-        if abs(h1 - h2) < 5:  # TODO (and I really mean TODO it is broken)
-            if (m1 - m2) == 0:
-                if (d1 - d2) == 0:
+        if (m1 - m2) == 0:
+            # Same month
+            if (d1 - d2) == 0:
+                # Same day
+                if abs(h1 - h2) < 5:
                     return True
+            elif abs(d1 - d2) == 1:
+                # Same month different day
+                if abs(h1 - h2) > 20:
+                    return True
+        elif abs(m1 - m2) == 1:
+            # Different month
+            if d1 >= 28 and d2 == 1:
+                # First day after last month
+                return True
+
         return False
